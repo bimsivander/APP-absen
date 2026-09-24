@@ -2,2883 +2,538 @@
 <html lang="id">
 
 <head>
-
   <meta charset="UTF-8">
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
 
-  <title>Altiorafi Attendance - Scanner</title>
+  <meta
+    name="theme-color"
+    content="#0f172a"
+  >
 
-  <!-- QR CAMERA LIBRARY -->
+  <meta
+    name="apple-mobile-web-app-capable"
+    content="yes"
+  >
+
+  <title>Altiorafi Attendance</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <!-- QR CAMERA -->
   <script
-    src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"
-  ></script>
-
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      min-height: 100%;
-      font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-
-      background: #f4f6fb;
-      color: #182033;
-    }
-
-
-    body {
-      min-height: 100vh;
-    }
-
-
-    button,
-    select {
-      font-family: inherit;
-    }
-
-
-    .app {
-      width: 100%;
-      max-width: 520px;
-      min-height: 100vh;
-      margin: 0 auto;
-      padding: 14px;
-    }
-
-
-    /* =================================================
-       HEADER
-    ================================================= */
-
-    .header {
-      position: relative;
-
-      padding: 20px;
-
-      border-radius: 28px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #4f46e5,
-          #6d28d9
-        );
-
-      color: white;
-
-      box-shadow:
-        0 18px 40px rgba(
-          79,
-          70,
-          229,
-          0.25
-        );
-
-      margin-bottom: 14px;
-    }
-
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-    }
-
-
-    .brand-icon {
-      width: 48px;
-      height: 48px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 16px;
-
-      background: rgba(
-        255,
-        255,
-        255,
-        0.16
-      );
-
-      font-size: 23px;
-      font-weight: 900;
-    }
-
-
-    .brand-text h1 {
-      margin: 0;
-
-      font-size: 20px;
-      font-weight: 850;
-    }
-
-
-    .brand-text p {
-      margin: 4px 0 0;
-
-      font-size: 12px;
-
-      color: rgba(
-        255,
-        255,
-        255,
-        0.78
-      );
-    }
-
-
-    /* =================================================
-       CONNECTION STATUS
-    ================================================= */
-
-    .connection {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-
-      margin-top: 15px;
-
-      padding: 9px 12px;
-
-      border-radius: 13px;
-
-      background: rgba(
-        255,
-        255,
-        255,
-        0.12
-      );
-
-      font-size: 11px;
-    }
-
-
-    .connection-dot {
-      width: 8px;
-      height: 8px;
-
-      border-radius: 50%;
-
-      background: #fbbf24;
-    }
-
-
-    .connection.connected
-    .connection-dot {
-      background: #34d399;
-    }
-
-
-    /* =================================================
-       CARD
-    ================================================= */
-
-    .card {
-      background: white;
-
-      border: 1px solid #e8eaf2;
-
-      border-radius: 24px;
-
-      padding: 16px;
-
-      margin-bottom: 14px;
-
-      box-shadow:
-        0 10px 30px
-        rgba(
-          40,
-          45,
-          90,
-          0.06
-        );
-    }
-
-
-    .card-title {
-      margin: 0 0 5px;
-
-      font-size: 16px;
-      font-weight: 850;
-    }
-
-
-    .card-subtitle {
-      margin: 0 0 15px;
-
-      font-size: 12px;
-
-      color: #7b8498;
-
-      line-height: 1.5;
-    }
-
-
-    /* =================================================
-       FORM
-    ================================================= */
-
-    .field {
-      margin-bottom: 13px;
-    }
-
-
-    .field label {
-      display: block;
-
-      margin-bottom: 7px;
-
-      font-size: 12px;
-
-      font-weight: 750;
-
-      color: #4a5265;
-    }
-
-
-    select {
-      width: 100%;
-
-      min-height: 48px;
-
-      padding: 0 14px;
-
-      border: 1px solid #e1e4ec;
-
-      border-radius: 15px;
-
-      background: #f9fafc;
-
-      color: #1f2937;
-
-      outline: none;
-
-      font-size: 13px;
-    }
-
-
-    select:focus {
-      border-color: #6366f1;
-
-      background: white;
-
-      box-shadow:
-        0 0 0 3px
-        rgba(
-          99,
-          102,
-          241,
-          0.10
-        );
-    }
-
-
-    /* =================================================
-       SESSION INFO
-    ================================================= */
-
-    .session-info {
-      display: none;
-
-      padding: 13px;
-
-      margin-top: 5px;
-
-      border-radius: 17px;
-
-      background: #f5f3ff;
-
-      border: 1px solid #e9e5ff;
-    }
-
-
-    .session-info.show {
-      display: block;
-    }
-
-
-    .session-name {
-      font-size: 14px;
-
-      font-weight: 850;
-
-      color: #4338ca;
-    }
-
-
-    .session-detail {
-      display: flex;
-      flex-wrap: wrap;
-
-      gap: 6px;
-
-      margin-top: 7px;
-
-      font-size: 11px;
-
-      color: #686f82;
-    }
-
-
-    .session-chip {
-      padding: 5px 8px;
-
-      border-radius: 8px;
-
-      background: white;
-
-      border: 1px solid #e4e1ff;
-    }
-
-
-    /* =================================================
-       CAMERA
-    ================================================= */
-
-    .camera-card {
-      padding: 10px;
-
-      border-radius: 21px;
-
-      background: #111827;
-
-      overflow: hidden;
-    }
-
-
-    #reader {
-      width: 100%;
-
-      min-height: 280px;
-
-      overflow: hidden;
-
-      border-radius: 17px;
-
-      background: #0b1020;
-    }
-
-
-    #reader video {
-      width: 100% !important;
-
-      height: auto !important;
-
-      object-fit: cover !important;
-
-      border-radius: 17px;
-    }
-
-
-    .camera-placeholder {
-      min-height: 280px;
-
-      display: flex;
-      flex-direction: column;
-
-      align-items: center;
-      justify-content: center;
-
-      color: #aeb7ca;
-
-      text-align: center;
-
-      padding: 30px;
-    }
-
-
-    .camera-icon {
-      width: 66px;
-      height: 66px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 22px;
-
-      background: #1f2937;
-
-      font-size: 30px;
-
-      margin-bottom: 12px;
-    }
-
-
-    .camera-placeholder strong {
-      color: white;
-
-      font-size: 14px;
-
-      margin-bottom: 5px;
-    }
-
-
-    .camera-placeholder span {
-      font-size: 11px;
-
-      line-height: 1.5;
-    }
-
-
-    /* =================================================
-       BUTTON
-    ================================================= */
-
-    .button {
-      width: 100%;
-
-      min-height: 48px;
-
-      border: 0;
-
-      border-radius: 15px;
-
-      font-size: 13px;
-
-      font-weight: 800;
-
-      cursor: pointer;
-
-      transition:
-        transform .15s ease,
-        opacity .15s ease;
-    }
-
-
-    .button:active {
-      transform: scale(.98);
-    }
-
-
-    .button-primary {
-      color: white;
-
-      background:
-        linear-gradient(
-          135deg,
-          #4f46e5,
-          #6366f1
-        );
-
-      box-shadow:
-        0 10px 20px
-        rgba(
-          79,
-          70,
-          229,
-          0.20
-        );
-    }
-
-
-    .button-secondary {
-      margin-top: 10px;
-
-      color: #4f46e5;
-
-      background: #eef0ff;
-    }
-
-
-    .button-danger {
-      margin-top: 10px;
-
-      color: #dc2626;
-
-      background: #fff1f2;
-    }
-
-
-    .button:disabled {
-      opacity: .5;
-
-      cursor: not-allowed;
-    }
-
-
-    /* =================================================
-       STATUS
-    ================================================= */
-
-    .status {
-      margin-top: 13px;
-
-      padding: 13px;
-
-      border-radius: 15px;
-
-      background: #f5f6fa;
-
-      color: #596277;
-
-      font-size: 12px;
-
-      line-height: 1.5;
-
-      text-align: center;
-    }
-
-
-    .status.success {
-      background: #ecfdf5;
-
-      color: #047857;
-    }
-
-
-    .status.error {
-      background: #fff1f2;
-
-      color: #be123c;
-    }
-
-
-    .status.warning {
-      background: #fffbeb;
-
-      color: #b45309;
-    }
-
-
-    /* =================================================
-       RESULT
-    ================================================= */
-
-    .result {
-      display: none;
-
-      padding: 16px;
-
-      border-radius: 19px;
-
-      margin-top: 13px;
-
-      text-align: center;
-
-      border: 1px solid;
-    }
-
-
-    .result.show {
-      display: block;
-    }
-
-
-    .result.success {
-      background: #ecfdf5;
-
-      border-color: #bbf7d0;
-
-      color: #047857;
-    }
-
-
-    .result.error {
-      background: #fff1f2;
-
-      border-color: #fecdd3;
-
-      color: #be123c;
-    }
-
-
-    .result-icon {
-      font-size: 30px;
-
-      margin-bottom: 6px;
-    }
-
-
-    .result-title {
-      font-size: 15px;
-
-      font-weight: 850;
-    }
-
-
-    .result-text {
-      margin-top: 5px;
-
-      font-size: 12px;
-
-      line-height: 1.5;
-    }
-
-
-    /* =================================================
-       LOADING
-    ================================================= */
-
-    .loading {
-      display: none;
-
-      align-items: center;
-
-      justify-content: center;
-
-      gap: 8px;
-
-      color: #697386;
-
-      font-size: 12px;
-
-      padding: 10px;
-    }
-
-
-    .loading.show {
-      display: flex;
-    }
-
-
-    .spinner {
-      width: 17px;
-      height: 17px;
-
-      border: 2px solid #ddd;
-
-      border-top-color: #4f46e5;
-
-      border-radius: 50%;
-
-      animation:
-        spin .7s linear infinite;
-    }
-
-
-    @keyframes spin {
-
-      to {
-        transform: rotate(360deg);
-      }
-
-    }
-
-
-    /* =================================================
-       FOOTER
-    ================================================= */
-
-    .footer {
-      padding: 8px 5px 20px;
-
-      text-align: center;
-
-      color: #9aa2b3;
-
-      font-size: 10px;
-
-      line-height: 1.5;
-    }
-
-
-    .hidden {
-      display: none !important;
-    }
-
-
-    @media (
-      min-width: 600px
-    ) {
-
-      body {
-        padding: 20px 0;
-      }
-
-      .app {
-        min-height: auto;
-      }
-
-    }
-
-  </style>
-
+    src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js">
+  </script>
 </head>
 
 
 <body>
 
+  <!-- =====================================================
+       APP
+  ====================================================== -->
 
-<div class="app">
+  <main class="app-shell">
 
+    <!-- HEADER -->
+    <header class="top-header">
 
-  <!-- =================================================
-       HEADER
-  ================================================= -->
+      <div class="brand-area">
 
-  <div class="header">
-
-    <div class="brand">
-
-      <div class="brand-icon">
-        QR
-      </div>
-
-      <div class="brand-text">
-
-        <h1>
-          Altiorafi Attendance
-        </h1>
-
-        <p>
-          Scanner QR Presensi
-        </p>
-
-      </div>
-
-    </div>
-
-
-    <div
-      id="connection"
-      class="connection"
-    >
-
-      <span class="connection-dot"></span>
-
-      <span id="connectionText">
-        Menghubungkan ke server...
-      </span>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =================================================
-       PILIH KELAS & SESI
-  ================================================= -->
-
-  <div class="card">
-
-    <h2 class="card-title">
-      Konfigurasi Absensi
-    </h2>
-
-    <p class="card-subtitle">
-      Pilih kelas dan sesi absensi yang sedang berlangsung.
-    </p>
-
-
-    <div class="field">
-
-      <label for="classSelect">
-        Kelas
-      </label>
-
-      <select id="classSelect">
-
-        <option value="">
-          Memuat kelas...
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <div class="field">
-
-      <label for="sessionSelect">
-        Sesi Absensi
-      </label>
-
-      <select
-        id="sessionSelect"
-        disabled
-      >
-
-        <option value="">
-          Pilih kelas terlebih dahulu
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <div
-      id="sessionInfo"
-      class="session-info"
-    >
-
-      <div
-        id="sessionName"
-        class="session-name"
-      >
-        -
-      </div>
-
-      <div
-        id="sessionDetail"
-        class="session-detail"
-      >
-      </div>
-
-    </div>
-
-
-    <div
-      id="sessionLoading"
-      class="loading"
-    >
-
-      <span class="spinner"></span>
-
-      <span>
-        Mengambil data sesi...
-      </span>
-
-    </div>
-
-  </div>
-
-
-
-  <!-- =================================================
-       CAMERA
-  ================================================= -->
-
-  <div class="card">
-
-    <h2 class="card-title">
-      Scanner QR
-    </h2>
-
-    <p class="card-subtitle">
-      Arahkan kamera belakang ke QR Code siswa.
-    </p>
-
-
-    <div class="camera-card">
-
-      <div
-        id="reader"
-        class="hidden"
-      ></div>
-
-
-      <div
-        id="cameraPlaceholder"
-        class="camera-placeholder"
-      >
-
-        <div class="camera-icon">
-          📷
+        <div class="brand-icon">
+          <span>✓</span>
         </div>
 
+        <div>
+          <h1>Altiorafi</h1>
+          <p>Attendance</p>
+        </div>
+
+      </div>
+
+      <div
+        class="connection-status"
+        id="connectionStatus"
+      >
+        <span class="status-dot"></span>
+        <span id="connectionText">
+          Menghubungkan...
+        </span>
+      </div>
+
+    </header>
+
+
+    <!-- ===================================================
+         MAIN CONTENT
+    ==================================================== -->
+
+    <section class="page-content">
+
+      <!-- TITLE -->
+      <div class="page-heading">
+
+        <div>
+          <span class="eyebrow">
+            ABSENSI DIGITAL
+          </span>
+
+          <h2>
+            Scan QR Siswa
+          </h2>
+
+          <p>
+            Pilih kelas dan sesi, lalu arahkan kamera ke QR siswa.
+          </p>
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           CLASS
+      ================================================== -->
+
+      <section class="control-card">
+
+        <div class="section-label">
+          <span class="section-number">
+            01
+          </span>
+
+          <div>
+            <h3>
+              Pilih Kelas
+            </h3>
+
+            <p>
+              Tentukan kelas yang sedang melakukan absensi.
+            </p>
+          </div>
+        </div>
+
+
+        <div class="select-wrapper">
+
+          <span class="select-icon">
+            ▣
+          </span>
+
+          <select
+            id="classSelect"
+          >
+
+            <option value="">
+              Memuat kelas...
+            </option>
+
+          </select>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           SESSION
+      ================================================== -->
+
+      <section class="control-card">
+
+        <div class="section-label">
+
+          <span class="section-number">
+            02
+          </span>
+
+          <div>
+            <h3>
+              Pilih Sesi
+            </h3>
+
+            <p id="sessionDescription">
+              Pilih kelas terlebih dahulu.
+            </p>
+          </div>
+
+        </div>
+
+
+        <div class="select-wrapper">
+
+          <span class="select-icon">
+            ◷
+          </span>
+
+          <select
+            id="sessionSelect"
+            disabled
+          >
+
+            <option value="">
+              Pilih kelas terlebih dahulu
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div
+          class="session-info hidden"
+          id="sessionInfo"
+        >
+
+          <div class="session-info-item">
+
+            <span class="info-label">
+              Mata Pelajaran
+            </span>
+
+            <strong id="sessionSubject">
+              -
+            </strong>
+
+          </div>
+
+
+          <div class="session-info-item">
+
+            <span class="info-label">
+              Waktu
+            </span>
+
+            <strong id="sessionTime">
+              -
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           CAMERA
+      ================================================== -->
+
+      <section class="camera-card">
+
+        <div class="camera-header">
+
+          <div>
+
+            <span class="eyebrow">
+              QR SCANNER
+            </span>
+
+            <h3>
+              Kamera Absensi
+            </h3>
+
+          </div>
+
+
+          <div
+            class="camera-badge"
+            id="cameraBadge"
+          >
+            SIAP
+          </div>
+
+        </div>
+
+
+        <!-- CAMERA -->
+        <div
+          class="scanner-container"
+          id="scannerContainer"
+        >
+
+          <div
+            id="reader"
+          ></div>
+
+
+          <!-- CAMERA OVERLAY -->
+
+          <div
+            class="scanner-overlay"
+            id="scannerOverlay"
+          >
+
+            <div class="scanner-frame">
+
+              <span class="corner top-left"></span>
+              <span class="corner top-right"></span>
+              <span class="corner bottom-left"></span>
+              <span class="corner bottom-right"></span>
+
+              <div class="scan-line"></div>
+
+            </div>
+
+            <p>
+              Arahkan QR siswa ke dalam kotak
+            </p>
+
+          </div>
+
+
+          <!-- CAMERA PLACEHOLDER -->
+
+          <div
+            class="camera-placeholder"
+            id="cameraPlaceholder"
+          >
+
+            <div class="camera-placeholder-icon">
+              ◉
+            </div>
+
+            <strong>
+              Kamera belum dimulai
+            </strong>
+
+            <span>
+              Tekan tombol di bawah untuk mengaktifkan kamera.
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- CAMERA BUTTON -->
+
+        <button
+          type="button"
+          class="primary-button camera-button"
+          id="cameraButton"
+        >
+
+          <span id="cameraButtonIcon">
+            ▷
+          </span>
+
+          <span id="cameraButtonText">
+            Mulai Kamera
+          </span>
+
+        </button>
+
+
+        <p
+          class="camera-note"
+        >
+          Izinkan akses kamera apabila browser memintanya.
+        </p>
+
+      </section>
+
+
+      <!-- =================================================
+           SCAN RESULT
+      ================================================== -->
+
+      <section
+        class="result-card hidden"
+        id="resultCard"
+      >
+
+        <div
+          class="result-icon"
+          id="resultIcon"
+        >
+          ✓
+        </div>
+
+
+        <div class="result-content">
+
+          <span
+            class="result-label"
+            id="resultLabel"
+          >
+            HASIL SCAN
+          </span>
+
+          <h3
+            id="resultStudentName"
+          >
+            -
+          </h3>
+
+          <p
+            id="resultStudentInfo"
+          >
+            -
+          </p>
+
+          <p
+            class="result-message"
+            id="resultMessage"
+          >
+            -
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           LAST SCAN
+      ================================================== -->
+
+      <section class="last-scan-card">
+
+        <div class="last-scan-header">
+
+          <div>
+            <span class="eyebrow">
+              AKTIVITAS
+            </span>
+
+            <h3>
+              Scan Terakhir
+            </h3>
+          </div>
+
+          <span
+            id="scanCount"
+            class="scan-count"
+          >
+            0
+          </span>
+
+        </div>
+
+
+        <div
+          id="lastScanList"
+          class="last-scan-list"
+        >
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+              ⌁
+            </div>
+
+            <strong>
+              Belum ada scan
+            </strong>
+
+            <span>
+              Hasil scan yang berhasil akan muncul di sini.
+            </span>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           API INFORMATION
+      ================================================== -->
+
+      <section class="technical-card">
+
+        <div class="technical-row">
+
+          <span>
+            Server
+          </span>
+
+          <strong id="serverStatus">
+            Checking...
+          </strong>
+
+        </div>
+
+
+        <div class="technical-row">
+
+          <span>
+            Kelas
+          </span>
+
+          <strong id="currentClassText">
+            -
+          </strong>
+
+        </div>
+
+
+        <div class="technical-row">
+
+          <span>
+            Sesi
+          </span>
+
+          <strong id="currentSessionText">
+            -
+          </strong>
+
+        </div>
+
+      </section>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="app-footer">
+
+      <div class="footer-logo">
+        A
+      </div>
+
+      <div>
+
         <strong>
-          Kamera belum dimulai
+          Altiorafi Attendance
         </strong>
 
         <span>
-          Pilih kelas dan sesi terlebih dahulu,
-          kemudian tekan tombol mulai kamera.
+          Sistem Absensi QR Digital
         </span>
 
       </div>
 
-    </div>
+    </footer>
+
+  </main>
 
 
-    <button
-      id="startButton"
-      class="button button-primary"
-      onclick="startCamera()"
-    >
-      📷 Mulai Kamera
-    </button>
-
-
-    <button
-      id="stopButton"
-      class="button button-danger hidden"
-      onclick="stopCamera()"
-    >
-      ■ Hentikan Kamera
-    </button>
-
-
-    <div
-      id="cameraStatus"
-      class="status"
-    >
-      Menunggu konfigurasi absensi.
-    </div>
-
-  </div>
-
-
-
-  <!-- =================================================
-       RESULT
-  ================================================= -->
+  <!-- TOAST -->
 
   <div
-    id="result"
-    class="result"
+    id="toast"
+    class="toast"
   >
-
-    <div
-      id="resultIcon"
-      class="result-icon"
-    >
+    <span id="toastIcon">
       ✓
-    </div>
+    </span>
 
-    <div
-      id="resultTitle"
-      class="result-title"
-    >
+    <span id="toastMessage">
       -
-    </div>
-
-    <div
-      id="resultText"
-      class="result-text"
-    >
-      -
-    </div>
-
+    </span>
   </div>
 
 
-
-  <!-- =================================================
-       FOOTER
-  ================================================= -->
-
-  <div class="footer">
-
-    Altiorafi Attendance<br>
-
-    Sistem Manajemen Absensi QR
-
-  </div>
-
-
-</div>
-
-
-
-<script>
-
-
-/* =====================================================
-   KONFIGURASI
-===================================================== */
-
-
-/*
- * URL WEB APP GOOGLE APPS SCRIPT
- *
- * PENTING:
- * Ganti dengan URL deployment Web App
- * Apps Script kamu.
- */
-const GAS_API_URL =
-  'PASTE_URL_WEB_APP_APPS_SCRIPT_DI_SINI';
-
-
-/*
- * Parameter yang dikirim dari Apps Script
- * saat membuka GitHub:
- *
- * ?sesiId=...
- * ?kelasId=...
- * ?token=...
- */
-const URL_PARAMS =
-  new URLSearchParams(
-    window.location.search
-  );
-
-
-let APP = {
-
-  token:
-    URL_PARAMS.get('token') || '',
-
-  currentClass:
-    URL_PARAMS.get('kelasId') || '',
-
-  currentSession:
-    URL_PARAMS.get('sesiId') || '',
-
-  classes: [],
-
-  sessions: [],
-
-  scanner: null,
-
-  scannerRunning: false,
-
-  processing: false
-
-};
-
-
-
-/* =====================================================
-   ELEMENT
-===================================================== */
-
-const classSelect =
-  document.getElementById(
-    'classSelect'
-  );
-
-
-const sessionSelect =
-  document.getElementById(
-    'sessionSelect'
-  );
-
-
-const sessionInfo =
-  document.getElementById(
-    'sessionInfo'
-  );
-
-
-const sessionName =
-  document.getElementById(
-    'sessionName'
-  );
-
-
-const sessionDetail =
-  document.getElementById(
-    'sessionDetail'
-  );
-
-
-const reader =
-  document.getElementById(
-    'reader'
-  );
-
-
-const cameraPlaceholder =
-  document.getElementById(
-    'cameraPlaceholder'
-  );
-
-
-const startButton =
-  document.getElementById(
-    'startButton'
-  );
-
-
-const stopButton =
-  document.getElementById(
-    'stopButton'
-  );
-
-
-const cameraStatus =
-  document.getElementById(
-    'cameraStatus'
-  );
-
-
-const result =
-  document.getElementById(
-    'result'
-  );
-
-
-const resultIcon =
-  document.getElementById(
-    'resultIcon'
-  );
-
-
-const resultTitle =
-  document.getElementById(
-    'resultTitle'
-  );
-
-
-const resultText =
-  document.getElementById(
-    'resultText'
-  );
-
-
-const connection =
-  document.getElementById(
-    'connection'
-  );
-
-
-const connectionText =
-  document.getElementById(
-    'connectionText'
-  );
-
-
-
-/* =====================================================
-   INITIALIZATION
-===================================================== */
-
-document.addEventListener(
-  'DOMContentLoaded',
-  function() {
-
-    initialize();
-
-  }
-);
-
-
-
-async function initialize() {
-
-  if (
-    !GAS_API_URL ||
-    GAS_API_URL.indexOf(
-      'PASTE_URL'
-    ) !== -1
-  ) {
-
-    setConnection(
-      false,
-      'URL Apps Script belum diatur.'
-    );
-
-    setStatus(
-      'URL Web App Apps Script belum dimasukkan ke index.html.',
-      'error'
-    );
-
-    return;
-
-  }
-
-
-  if (!APP.token) {
-
-    setConnection(
-      false,
-      'Token login tidak ditemukan.'
-    );
-
-    setStatus(
-      'Scanner harus dibuka dari aplikasi Altiorafi Attendance.',
-      'warning'
-    );
-
-    return;
-
-  }
-
-
-  setConnection(
-    false,
-    'Menghubungkan ke Google Apps Script...'
-  );
-
-
-  try {
-
-    await pingServer();
-
-    await loadClasses();
-
-    /*
-     * Jika Apps Script mengirim kelas + sesi
-     * dari dashboard, langsung gunakan.
-     */
-    if (APP.currentClass) {
-
-      classSelect.value =
-        APP.currentClass;
-
-      await loadSessions(
-        APP.currentClass
-      );
-
-    }
-
-
-    if (
-      APP.currentSession &&
-      APP.sessions.some(
-        function(item) {
-
-          return String(
-            item.SesiID
-          ) ===
-          String(
-            APP.currentSession
-          );
-
-        }
-      )
-    ) {
-
-      sessionSelect.value =
-        APP.currentSession;
-
-      renderSelectedSession();
-
-    }
-
-
-    setConnection(
-      true,
-      'Terhubung ke Google Apps Script'
-    );
-
-
-    setStatus(
-      'Pilih kelas dan sesi absensi.',
-      ''
-    );
-
-  }
-  catch(error) {
-
-    console.error(
-      error
-    );
-
-
-    setConnection(
-      false,
-      'Gagal terhubung ke server'
-    );
-
-
-    setStatus(
-      error.message ||
-      'Gagal mengambil data dari server.',
-      'error'
-    );
-
-  }
-
-}
-
-
-
-/* =====================================================
-   JSONP API
-===================================================== */
-
-/*
- * GitHub Pages tidak boleh mengandalkan fetch
- * biasa ke Apps Script karena masalah CORS.
- *
- * Kita gunakan JSONP.
- */
-function api(
-  action,
-  params = {}
-) {
-
-  return new Promise(
-    function(resolve, reject) {
-
-      const callbackName =
-        'altiorafiCallback_' +
-        Date.now() +
-        '_' +
-        Math.floor(
-          Math.random() * 100000
-        );
-
-
-      const script =
-        document.createElement(
-          'script'
-        );
-
-
-      const query =
-        new URLSearchParams();
-
-
-      query.set(
-        'action',
-        action
-      );
-
-
-      query.set(
-        'callback',
-        callbackName
-      );
-
-
-      Object.keys(params).forEach(
-        function(key) {
-
-          const value =
-            params[key];
-
-
-          if (
-            value !== undefined &&
-            value !== null
-          ) {
-
-            query.set(
-              key,
-              String(value)
-            );
-
-          }
-
-        }
-      );
-
-
-      let timeoutId;
-
-
-      window[callbackName] =
-        function(response) {
-
-          clearTimeout(
-            timeoutId
-          );
-
-
-          cleanup();
-
-
-          if (
-            response &&
-            response.success
-          ) {
-
-            resolve(
-              response
-            );
-
-          }
-          else {
-
-            reject(
-              new Error(
-                response?.message ||
-                'Server mengembalikan kesalahan.'
-              )
-            );
-
-          }
-
-        };
-
-
-      function cleanup() {
-
-        delete window[
-          callbackName
-        ];
-
-
-        if (
-          script.parentNode
-        ) {
-
-          script.parentNode.removeChild(
-            script
-          );
-
-        }
-
-      }
-
-
-      script.onerror =
-        function() {
-
-          clearTimeout(
-            timeoutId
-          );
-
-
-          cleanup();
-
-
-          reject(
-            new Error(
-              'Tidak dapat menghubungi Google Apps Script.'
-            )
-          );
-
-        };
-
-
-      timeoutId =
-        setTimeout(
-          function() {
-
-            cleanup();
-
-
-            reject(
-              new Error(
-                'Server tidak merespons.'
-              )
-            );
-
-          },
-          15000
-        );
-
-
-      script.src =
-        GAS_API_URL +
-        '?' +
-        query.toString();
-
-
-      document.body.appendChild(
-        script
-      );
-
-    }
-  );
-
-}
-
-
-
-/* =====================================================
-   PING
-===================================================== */
-
-async function pingServer() {
-
-  const response =
-    await api(
-      'ping'
-    );
-
-
-  if (
-    !response.success
-  ) {
-
-    throw new Error(
-      'Server tidak dapat dihubungi.'
-    );
-
-  }
-
-
-  return response;
-
-}
-
-
-
-/* =====================================================
-   LOAD CLASSES
-===================================================== */
-
-async function loadClasses() {
-
-  classSelect.innerHTML = `
-
-    <option value="">
-      Memuat kelas...
-    </option>
-
-  `;
-
-
-  const response =
-    await api(
-      'classes',
-      {
-        token:
-          APP.token
-      }
-    );
-
-
-  APP.classes =
-    response.data || [];
-
-
-  if (
-    !APP.classes.length
-  ) {
-
-    classSelect.innerHTML = `
-
-      <option value="">
-        Tidak ada kelas
-      </option>
-
-    `;
-
-
-    throw new Error(
-      'Data kelas tidak ditemukan di Spreadsheet.'
-    );
-
-  }
-
-
-  classSelect.innerHTML = `
-
-    <option value="">
-      Pilih kelas
-    </option>
-
-  `;
-
-
-  APP.classes.forEach(
-    function(item) {
-
-      const option =
-        document.createElement(
-          'option'
-        );
-
-
-      option.value =
-        item.KelasID;
-
-
-      option.textContent =
-        item.NamaKelas ||
-        item.KelasID;
-
-
-      classSelect.appendChild(
-        option
-      );
-
-    }
-  );
-
-
-  /*
-   * Jika dashboard mengirim kelas,
-   * pilih otomatis.
-   */
-  if (
-    APP.currentClass
-  ) {
-
-    const exists =
-      APP.classes.some(
-        function(item) {
-
-          return String(
-            item.KelasID
-          ) ===
-          String(
-            APP.currentClass
-          );
-
-        }
-      );
-
-
-    if (exists) {
-
-      classSelect.value =
-        APP.currentClass;
-
-    }
-
-  }
-
-}
-
-
-
-/* =====================================================
-   CLASS CHANGE
-===================================================== */
-
-classSelect.addEventListener(
-  'change',
-  async function() {
-
-    const kelasId =
-      classSelect.value;
-
-
-    APP.currentClass =
-      kelasId;
-
-
-    APP.currentSession =
-      '';
-
-
-    sessionInfo.classList.remove(
-      'show'
-    );
-
-
-    sessionSelect.innerHTML = `
-
-      <option value="">
-        Memuat sesi...
-      </option>
-
-    `;
-
-
-    sessionSelect.disabled =
-      true;
-
-
-    stopCamera();
-
-
-    hideResult();
-
-
-    if (!kelasId) {
-
-      sessionSelect.innerHTML = `
-
-        <option value="">
-          Pilih kelas terlebih dahulu
-        </option>
-
-      `;
-
-      return;
-
-    }
-
-
-    try {
-
-      await loadSessions(
-        kelasId
-      );
-
-    }
-    catch(error) {
-
-      showResult(
-        false,
-        'Gagal mengambil sesi',
-        error.message
-      );
-
-    }
-
-  }
-);
-
-
-
-/* =====================================================
-   LOAD SESSIONS
-===================================================== */
-
-async function loadSessions(
-  kelasId
-) {
-
-  const selectedClass =
-    kelasId ||
-    APP.currentClass;
-
-
-  if (!selectedClass) {
-    return;
-  }
-
-
-  const loading =
-    document.getElementById(
-      'sessionLoading'
-    );
-
-
-  loading.classList.add(
-    'show'
-  );
-
-
-  try {
-
-    const response =
-      await api(
-        'sessions',
-        {
-          token:
-            APP.token,
-
-          kelasId:
-            selectedClass
-        }
-      );
-
-
-    APP.sessions =
-      (
-        response.data ||
-        []
-      ).filter(
-        function(item) {
-
-          return String(
-            item.Status
-          ) === 'Aktif';
-
-        }
-      );
-
-
-    renderSessions();
-
-  }
-  finally {
-
-    loading.classList.remove(
-      'show'
-    );
-
-  }
-
-}
-
-
-
-/* =====================================================
-   RENDER SESSIONS
-===================================================== */
-
-function renderSessions() {
-
-  sessionSelect.innerHTML = `
-
-    <option value="">
-      Pilih sesi absensi
-    </option>
-
-  `;
-
-
-  if (
-    !APP.sessions.length
-  ) {
-
-    sessionSelect.innerHTML = `
-
-      <option value="">
-        Belum ada sesi aktif
-      </option>
-
-    `;
-
-
-    sessionSelect.disabled =
-      true;
-
-
-    sessionInfo.classList.remove(
-      'show'
-    );
-
-
-    return;
-
-  }
-
-
-  APP.sessions.forEach(
-    function(item) {
-
-      const option =
-        document.createElement(
-          'option'
-        );
-
-
-      option.value =
-        item.SesiID;
-
-
-      option.textContent =
-        buildSessionLabel(
-          item
-        );
-
-
-      sessionSelect.appendChild(
-        option
-      );
-
-    }
-  );
-
-
-  sessionSelect.disabled =
-    false;
-
-
-  /*
-   * Pilih sesi yang dikirim
-   * dari Apps Script.
-   */
-  if (
-    APP.currentSession &&
-    APP.sessions.some(
-      function(item) {
-
-        return String(
-          item.SesiID
-        ) ===
-        String(
-          APP.currentSession
-        );
-
-      }
-    )
-  ) {
-
-    sessionSelect.value =
-      APP.currentSession;
-
-  }
-
-
-  renderSelectedSession();
-
-}
-
-
-
-/* =====================================================
-   SESSION CHANGE
-===================================================== */
-
-sessionSelect.addEventListener(
-  'change',
-  function() {
-
-    APP.currentSession =
-      sessionSelect.value;
-
-
-    stopCamera();
-
-    hideResult();
-
-    renderSelectedSession();
-
-  }
-);
-
-
-
-/* =====================================================
-   SESSION DETAIL
-===================================================== */
-
-function renderSelectedSession() {
-
-  const sesiId =
-    sessionSelect.value;
-
-
-  const session =
-    APP.sessions.find(
-      function(item) {
-
-        return String(
-          item.SesiID
-        ) ===
-        String(
-          sesiId
-        );
-
-      }
-    );
-
-
-  if (!session) {
-
-    sessionInfo.classList.remove(
-      'show'
-    );
-
-    return;
-
-  }
-
-
-  sessionName.textContent =
-    session.NamaMapel ||
-    session.MapelID ||
-    'Mata Pelajaran';
-
-
-  sessionDetail.innerHTML = `
-
-    <span class="session-chip">
-      🏫
-      ${escapeHtml(
-        session.NamaKelas ||
-        session.KelasID ||
-        '-'
-      )}
-    </span>
-
-    <span class="session-chip">
-      🕐
-      ${escapeHtml(
-        session.JamMulai ||
-        '--:--'
-      )}
-      -
-      ${escapeHtml(
-        session.JamSelesai ||
-        '--:--'
-      )}
-    </span>
-
-    <span class="session-chip">
-      👨‍🏫
-      ${escapeHtml(
-        session.NamaGuru ||
-        session.UserID ||
-        '-'
-      )}
-    </span>
-
-    <span class="session-chip">
-      ID:
-      ${escapeHtml(
-        session.SesiID
-      )}
-    </span>
-
-  `;
-
-
-  sessionInfo.classList.add(
-    'show'
-  );
-
-
-  setStatus(
-    'Sesi siap. Tekan "Mulai Kamera".',
-    ''
-  );
-
-}
-
-
-
-/* =====================================================
-   START CAMERA
-===================================================== */
-
-async function startCamera() {
-
-  if (
-    APP.scannerRunning
-  ) {
-
-    return;
-
-  }
-
-
-  if (!APP.currentClass) {
-
-    showResult(
-      false,
-      'Kelas belum dipilih',
-      'Silakan pilih kelas terlebih dahulu.'
-    );
-
-    return;
-
-  }
-
-
-  if (!APP.currentSession) {
-
-    showResult(
-      false,
-      'Sesi belum dipilih',
-      'Silakan pilih sesi absensi terlebih dahulu.'
-    );
-
-    return;
-
-  }
-
-
-  if (
-    typeof Html5Qrcode ===
-    'undefined'
-  ) {
-
-    showResult(
-      false,
-      'Scanner gagal dimuat',
-      'Library kamera QR belum berhasil dimuat. Refresh halaman.'
-    );
-
-    return;
-
-  }
-
-
-  try {
-
-    APP.processing =
-      false;
-
-
-    hideResult();
-
-
-    /*
-     * Bersihkan scanner lama.
-     */
-    await cleanupScanner();
-
-
-    cameraPlaceholder.classList.add(
-      'hidden'
-    );
-
-
-    reader.classList.remove(
-      'hidden'
-    );
-
-
-    startButton.classList.add(
-      'hidden'
-    );
-
-
-    stopButton.classList.remove(
-      'hidden'
-    );
-
-
-    setStatus(
-      'Meminta izin kamera...',
-      ''
-    );
-
-
-    APP.scanner =
-      new Html5Qrcode(
-        'reader'
-      );
-
-
-    const cameras =
-      await Html5Qrcode.getCameras();
-
-
-    if (
-      !cameras ||
-      !cameras.length
-    ) {
-
-      throw new Error(
-        'Kamera tidak ditemukan pada perangkat.'
-      );
-
-    }
-
-
-    /*
-     * Cari kamera belakang.
-     */
-    let selectedCamera =
-      cameras[0];
-
-
-    const backCamera =
-      cameras.find(
-        function(camera) {
-
-          const label =
-            String(
-              camera.label ||
-              ''
-            ).toLowerCase();
-
-
-          return (
-            label.includes('back') ||
-            label.includes('rear') ||
-            label.includes('environment')
-          );
-
-        }
-      );
-
-
-    if (backCamera) {
-
-      selectedCamera =
-        backCamera;
-
-    }
-
-
-    const config = {
-
-      fps: 10,
-
-      qrbox:
-        function(
-          viewfinderWidth,
-          viewfinderHeight
-        ) {
-
-          const min =
-            Math.min(
-              viewfinderWidth,
-              viewfinderHeight
-            );
-
-
-          const size =
-            Math.floor(
-              min * 0.70
-            );
-
-
-          return {
-
-            width:
-              size,
-
-            height:
-              size
-
-          };
-
-        },
-
-      aspectRatio: 1.0,
-
-      formatsToSupport: [
-
-        Html5QrcodeSupportedFormats.QR_CODE
-
-      ]
-
-    };
-
-
-    await APP.scanner.start(
-
-      selectedCamera.id,
-
-      config,
-
-      function(decodedText) {
-
-        handleQRCode(
-          decodedText
-        );
-
-      },
-
-      function() {
-
-        /*
-         * Tidak menampilkan error
-         * saat QR belum ditemukan.
-         */
-
-      }
-
-    );
-
-
-    APP.scannerRunning =
-      true;
-
-
-    setStatus(
-      'Kamera aktif. Arahkan ke QR siswa.',
-      'success'
-    );
-
-  }
-  catch(error) {
-
-    console.error(
-      'Camera error:',
-      error
-    );
-
-
-    await cleanupScanner();
-
-
-    showResult(
-      false,
-      'Kamera tidak dapat digunakan',
-      getCameraErrorMessage(
-        error
-      )
-    );
-
-  }
-
-}
-
-
-
-/* =====================================================
-   STOP CAMERA
-===================================================== */
-
-async function stopCamera() {
-
-  await cleanupScanner();
-
-
-  reader.classList.add(
-    'hidden'
-  );
-
-
-  cameraPlaceholder.classList.remove(
-    'hidden'
-  );
-
-
-  startButton.classList.remove(
-    'hidden'
-  );
-
-
-  stopButton.classList.add(
-    'hidden'
-  );
-
-
-  setStatus(
-    'Kamera dihentikan.',
-    ''
-  );
-
-}
-
-
-
-/* =====================================================
-   CLEANUP CAMERA
-===================================================== */
-
-async function cleanupScanner() {
-
-  if (
-    APP.scanner
-  ) {
-
-    try {
-
-      if (
-        APP.scannerRunning
-      ) {
-
-        await APP.scanner.stop();
-
-      }
-
-    }
-    catch(error) {
-
-      console.warn(
-        'Scanner stop:',
-        error
-      );
-
-    }
-
-
-    try {
-
-      await APP.scanner.clear();
-
-    }
-    catch(error) {
-
-      console.warn(
-        'Scanner clear:',
-        error
-      );
-
-    }
-
-  }
-
-
-  APP.scanner =
-    null;
-
-  APP.scannerRunning =
-    false;
-
-}
-
-
-
-/* =====================================================
-   QR RESULT
-===================================================== */
-
-async function handleQRCode(
-  decodedText
-) {
-
-  if (
-    APP.processing
-  ) {
-
-    return;
-
-  }
-
-
-  const siswaId =
-    normalizeQRCode(
-      decodedText
-    );
-
-
-  if (!siswaId) {
-
-    setStatus(
-      'QR tidak berisi SiswaID yang valid.',
-      'error'
-    );
-
-    return;
-
-  }
-
-
-  APP.processing =
-    true;
-
-
-  setStatus(
-    'QR terbaca. Memeriksa siswa...',
-    ''
-  );
-
-
-  try {
-
-    /*
-     * Jangan langsung mengirim data mentah.
-     * SiswaID dibersihkan terlebih dahulu.
-     */
-    const response =
-      await api(
-        'scan',
-        {
-          token:
-            APP.token,
-
-          siswaId:
-            siswaId,
-
-          sesiId:
-            APP.currentSession
-        }
-      );
-
-
-    const data =
-      response.data ||
-      {};
-
-
-    showResult(
-      true,
-      'Absensi berhasil!',
-      (
-        data.NamaLengkap ||
-        siswaId
-      ) +
-      ' tercatat hadir pada ' +
-      (
-        data.JamScan ||
-        'waktu sekarang'
-      ) +
-      '.'
-    );
-
-
-    /*
-     * Beri waktu supaya user
-     * melihat hasil scan.
-     */
-    setStatus(
-      'Absensi berhasil dicatat. Siap untuk scan berikutnya.',
-      'success'
-    );
-
-
-    setTimeout(
-      function() {
-
-        APP.processing =
-          false;
-
-      },
-      1800
-    );
-
-  }
-  catch(error) {
-
-    console.error(
-      'Scan error:',
-      error
-    );
-
-
-    showResult(
-      false,
-      'Absensi gagal',
-      error.message ||
-      'Data absensi tidak dapat disimpan.'
-    );
-
-
-    setStatus(
-      error.message ||
-      'Scan gagal.',
-      'error'
-    );
-
-
-    setTimeout(
-      function() {
-
-        APP.processing =
-          false;
-
-      },
-      1800
-    );
-
-  }
-
-}
-
-
-
-/* =====================================================
-   NORMALIZE QR
-===================================================== */
-
-function normalizeQRCode(
-  value
-) {
-
-  let text =
-    String(
-      value ||
-      ''
-    ).trim();
-
-
-  /*
-   * QR utama proyek:
-   *
-   * STD001
-   */
-  if (
-    /^STD\d+$/i.test(
-      text
-    )
-  ) {
-
-    return text.toUpperCase();
-
-  }
-
-
-  /*
-   * Kompatibilitas jika QR
-   * ternyata berisi URL.
-   */
-  try {
-
-    if (
-      text.startsWith(
-        'http://'
-      ) ||
-      text.startsWith(
-        'https://'
-      )
-    ) {
-
-      const url =
-        new URL(
-          text
-        );
-
-
-      const qrSiswa =
-        url.searchParams.get(
-          'siswaId'
-        );
-
-
-      if (
-        qrSiswa &&
-        /^STD\d+$/i.test(
-          qrSiswa
-        )
-      ) {
-
-        return qrSiswa.toUpperCase();
-
-      }
-
-    }
-
-  }
-  catch(error) {}
-
-
-  /*
-   * Kompatibilitas format lama:
-   *
-   * HADIRR|STD001
-   *
-   * Tetapi database tetap
-   * menggunakan SiswaID.
-   */
-  const oldFormat =
-    text.match(
-      /^HADIRR\|(.+)$/i
-    );
-
-
-  if (
-    oldFormat &&
-    /^STD\d+$/i.test(
-      oldFormat[1].trim()
-    )
-  ) {
-
-    return oldFormat[1]
-      .trim()
-      .toUpperCase();
-
-  }
-
-
-  return '';
-
-}
-
-
-
-/* =====================================================
-   RESULT UI
-===================================================== */
-
-function showResult(
-  success,
-  title,
-  message
-) {
-
-  result.className =
-    'result show ' +
-    (
-      success
-        ? 'success'
-        : 'error'
-    );
-
-
-  resultIcon.textContent =
-    success
-      ? '✓'
-      : '!';
-
-
-  resultTitle.textContent =
-    title;
-
-
-  resultText.textContent =
-    message;
-
-
-  /*
-   * Scroll sedikit agar hasil
-   * terlihat di HP.
-   */
-  setTimeout(
-    function() {
-
-      result.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest'
-      });
-
-    },
-    50
-  );
-
-}
-
-
-function hideResult() {
-
-  result.classList.remove(
-    'show'
-  );
-
-}
-
-
-
-/* =====================================================
-   STATUS
-===================================================== */
-
-function setStatus(
-  text,
-  type
-) {
-
-  cameraStatus.textContent =
-    text;
-
-
-  cameraStatus.className =
-    'status';
-
-
-  if (type) {
-
-    cameraStatus.classList.add(
-      type
-    );
-
-  }
-
-}
-
-
-
-/* =====================================================
-   CONNECTION
-===================================================== */
-
-function setConnection(
-  connected,
-  text
-) {
-
-  connection.classList.toggle(
-    'connected',
-    connected
-  );
-
-
-  connectionText.textContent =
-    text;
-
-}
-
-
-
-/* =====================================================
-   CAMERA ERROR
-===================================================== */
-
-function getCameraErrorMessage(
-  error
-) {
-
-  const text =
-    String(
-      error?.message ||
-      error ||
-      ''
-    ).toLowerCase();
-
-
-  if (
-    text.includes(
-      'permission'
-    ) ||
-    text.includes(
-      'notallowed'
-    )
-  ) {
-
-    return (
-      'Izin kamera ditolak. ' +
-      'Izinkan kamera untuk situs GitHub Pages ini melalui pengaturan browser.'
-    );
-
-  }
-
-
-  if (
-    text.includes(
-      'secure'
-    ) ||
-    text.includes(
-      'https'
-    )
-  ) {
-
-    return (
-      'Kamera membutuhkan halaman HTTPS. ' +
-      'Pastikan GitHub Pages dibuka menggunakan https://.'
-    );
-
-  }
-
-
-  if (
-    text.includes(
-      'notfound'
-    ) ||
-    text.includes(
-      'not found'
-    )
-  ) {
-
-    return (
-      'Kamera tidak ditemukan pada perangkat.'
-    );
-
-  }
-
-
-  return (
-    error?.message ||
-    'Kamera gagal dibuka. Pastikan izin kamera aktif.'
-  );
-
-}
-
-
-
-/* =====================================================
-   SESSION LABEL
-===================================================== */
-
-function buildSessionLabel(
-  session
-) {
-
-  const mapel =
-    session.NamaMapel ||
-    session.MapelID ||
-    'Mapel';
-
-
-  const start =
-    session.JamMulai ||
-    '--:--';
-
-
-  const end =
-    session.JamSelesai ||
-    '--:--';
-
-
-  return (
-    mapel +
-    ' • ' +
-    start +
-    ' - ' +
-    end
-  );
-
-}
-
-
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHtml(
-  value
-) {
-
-  return String(
-    value ??
-    ''
-  )
-  .replace(
-    /&/g,
-    '&amp;'
-  )
-  .replace(
-    /</g,
-    '&lt;'
-  )
-  .replace(
-    />/g,
-    '&gt;'
-  )
-  .replace(
-    /"/g,
-    '&quot;'
-  )
-  .replace(
-    /'/g,
-    '&#039;'
-  );
-
-}
-
-
-</script>
+  <script src="app.js"></script>
 
 </body>
 
