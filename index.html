@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <title>Altiorafi Attendance</title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <!-- QR SCANNER -->
+  <script
+    src="https://unpkg.com/html5-qrcode"
+    type="text/javascript"
+  ></script>
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <!-- =========================================
+         LOGIN
+    ========================================== -->
+    <section
+      id="loginPage"
+      class="page active"
+    >
+
+      <div class="login-container">
+
+        <div class="brand-icon">
+          <span>⌁</span>
+        </div>
+
+        <h1>Altiorafi</h1>
+
+        <p class="brand-subtitle">
+          Attendance Scanner
+        </p>
+
+        <div class="login-card">
+
+          <div class="input-group">
+
+            <label>Username</label>
+
+            <input
+              type="text"
+              id="username"
+              placeholder="Masukkan username"
+              autocomplete="username"
+            >
+
+          </div>
+
+
+          <div class="input-group">
+
+            <label>Password</label>
+
+            <input
+              type="password"
+              id="password"
+              placeholder="Masukkan password"
+              autocomplete="current-password"
+            >
+
+          </div>
+
+
+          <button
+            class="primary-button"
+            onclick="login()"
+          >
+            Masuk
+          </button>
+
+          <div
+            id="loginMessage"
+            class="message"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================================
+         MAIN APP
+    ========================================== -->
+    <section
+      id="appPage"
+      class="page"
+    >
+
+      <!-- HEADER -->
+      <header class="app-header">
+
+        <div>
+
+          <span class="small-label">
+            ALTIORAFI ATTENDANCE
+          </span>
+
+          <h2>Scanner QR</h2>
+
+        </div>
+
+        <button
+          class="logout-button"
+          onclick="logout()"
+        >
+          Keluar
+        </button>
+
+      </header>
+
+
+      <!-- =======================================
+           SESSION CARD
+      ======================================== -->
+      <section class="session-card">
+
+        <div class="section-title">
+
+          <div>
+            <span class="eyebrow">
+              SESI ABSENSI
+            </span>
+
+            <h3>Pilih Sesi</h3>
+          </div>
+
+          <span
+            id="connectionStatus"
+            class="connection-badge"
+          >
+            Checking...
+          </span>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>Kelas</label>
+
+          <select
+            id="classSelect"
+            onchange="loadSessions()"
+          >
+            <option value="">
+              Memuat kelas...
+            </option>
+          </select>
+
+        </div>
+
+
+        <div class="input-group">
+
+          <label>Sesi Aktif</label>
+
+          <select id="sessionSelect">
+
+            <option value="">
+              Pilih sesi absensi
+            </option>
+
+          </select>
+
+        </div>
+
+      </section>
+
+
+      <!-- =======================================
+           SCANNER
+      ======================================== -->
+      <section class="scanner-card">
+
+        <div class="scanner-header">
+
+          <div>
+
+            <span class="eyebrow">
+              QR SCANNER
+            </span>
+
+            <h3>Scan Kartu Siswa</h3>
+
+          </div>
+
+          <span class="camera-status">
+            Kamera
+          </span>
+
+        </div>
+
+
+        <div
+          id="reader"
+          class="qr-reader"
+        ></div>
+
+
+        <div class="scanner-help">
+
+          <div class="help-icon">
+            QR
+          </div>
+
+          <div>
+
+            <strong>
+              Arahkan kamera ke QR siswa
+            </strong>
+
+            <p>
+              Pastikan QR Code terlihat jelas
+              di dalam kotak scanner.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =======================================
+           HASIL SCAN
+      ======================================== -->
+      <section
+        id="resultCard"
+        class="result-card hidden"
+      >
+
+        <div class="result-icon">
+          ✓
+        </div>
+
+        <div class="result-content">
+
+          <span
+            id="resultStatus"
+            class="result-status"
+          >
+            Berhasil
+          </span>
+
+          <h3 id="resultName">
+            -
+          </h3>
+
+          <p id="resultStudentId">
+            -
+          </p>
+
+          <div class="result-time">
+            <span>Jam Scan</span>
+            <strong id="resultTime">
+              -
+            </strong>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =======================================
+           MANUAL SCAN
+      ======================================== -->
+      <section class="manual-card">
+
+        <div class="section-title">
+
+          <div>
+
+            <span class="eyebrow">
+              ALTERNATIF
+            </span>
+
+            <h3>Input Manual</h3>
+
+          </div>
+
+        </div>
+
+
+        <div class="manual-row">
+
+          <input
+            type="text"
+            id="manualStudentId"
+            placeholder="Contoh: STD001"
+          >
+
+          <button
+            onclick="manualScan()"
+            class="secondary-button"
+          >
+            Scan
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- =======================================
+           FOOTER
+      ======================================== -->
+      <footer>
+
+        <p>
+          Altiorafi Attendance
+        </p>
+
+        <span>
+          Google Apps Script + Google Sheets
+        </span>
+
+      </footer>
+
+    </section>
+
+  </div>
+
+
+  <!-- TOAST -->
+  <div
+    id="toast"
+    class="toast"
+  ></div>
+
+
+  <script src="app.js"></script>
+
+</body>
+</html>
