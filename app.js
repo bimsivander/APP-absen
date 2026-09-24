@@ -17,7 +17,7 @@
  */
 
 const API_URL =
-  "PASTE_URL_WEB_APP_APPS_SCRIPT_DI_SINI";
+  "https://script.google.com/macros/s/AKfycbzENCik_B9MN-lyQbQ1PbhYfo5XmaxoWkCLnAtAV99kKWoddbPV2lfm5sBWwp115uDC/exec";
 
 
 /* =====================================================
